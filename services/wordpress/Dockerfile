@@ -16,4 +16,4 @@ EXPOSE 5050
 
 CMD ["php","-S", "0.0.0.0:5050", "-t", "/wordpress"]
 
-#TODO secrets + deployment + service + create DB DUMP + sed IP in DUMP + verifier IP
+#TODO create DB DUMP + sed IP in DUMP + verifier IP

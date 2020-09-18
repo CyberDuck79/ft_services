@@ -43,4 +43,4 @@ spec:
           valueFrom:
                 secretKeyRef:
                   name: wordpress-secret
-                  key: db-password
+                  key: db_password

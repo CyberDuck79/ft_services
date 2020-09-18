@@ -40,6 +40,16 @@ spec:
                 secretKeyRef:
                   name: mariadb-secret
                   key: mysql_root_password
+          - name: DB_USER
+            valueFrom:
+                secretKeyRef:
+                  name: wordpress-secret
+                  key: db_user
+          - name: DB_PASSWORD
+            valueFrom:
+                secretKeyRef:
+                  name: wordpress-secret
+                  key: db_password
         livenessProbe:
             exec:
               command:

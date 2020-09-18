@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpmyadmin-deploy
+  labels:
+    app: phpmyadmin-app
+spec:
+  selector:
+    matchLabels:
+      app: phpmyadmin-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: phpmyadmin-app
+    spec:
+      restartPolicy: Always
+      containers:
+      - image: phpmyadmin-img
+        name: phpmyadmin
+        ports:
+        - containerPort: 5000
+          name: http
+        imagePullPolicy: Never
+        env:
+        - name: PMA_HOST
+          valueFrom:
+                secretKeyRef:
+                  name: phpmyadmin-secret
+                  key: pma_host
+        - name: PMA_PORT
+          valueFrom:
+                secretKeyRef:
+                  name: phpmyadmin-secret
+                  key: pma_port
+        - name: PMA_USER
+          valueFrom:
+                secretKeyRef:
+                  name: phpmyadmin-secret
+                  key: pma_user
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret
+                  key: mysql_root_password
