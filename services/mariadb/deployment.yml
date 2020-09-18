@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-vol-clm
+  labels:
+    app: mariadb-app
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb-deploy
+spec:
+  selector:
+    matchLabels:
+      app: mariadb-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mariadb-app
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: mariadb
+        image: mariadb-img:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret
+                  key: mysql_root_password
+        livenessProbe:
+            exec:
+              command:
+                - sh
+                - livenessprobe.sh
+            initialDelaySeconds: 15
+            periodSeconds: 3
+        volumeMounts:
+        - name: mariadb-vol
+          mountPath: /var/lib/mysql
+      volumes:
+        - name: mariadb-vol
+          persistentVolumeClaim:
+            claimName: mariadb-vol-clm
+
+

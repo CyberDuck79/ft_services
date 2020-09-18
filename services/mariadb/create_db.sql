@@ -1,0 +1,6 @@
+CREATE USER 'flavien'@'%' IDENTIFIED BY 'henrion';
+GRANT ALL PRIVILEGES ON *.* TO 'flavien'@'%' WITH GRANT OPTION;
+CREATE DATABASE wordpress;
+GRANT ALL PRIVILEGES ON wordpress.* TO 'flavien'@'%' IDENTIFIED BY 'henrion';
+DROP DATABASE test;
+FLUSH PRIVILEGES;

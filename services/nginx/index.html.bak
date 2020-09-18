@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ft_ducks</title>
+		<link rel="stylesheet" href="index.css">
+		<script>
+			var snd = new Audio("/quack.mp3");
+			function quack()
+			{
+				if (!(document.getElementById("quak").innerHTML == "I'M DONE WITH YOU")) {
+					snd.play();
+				}
+				if (document.getElementById("quak").innerHTML == "Click on me !")
+					document.getElementById("quak").innerHTML = "Again ! Again !";
+				else if (document.getElementById("quak").innerHTML == "Again ! Again !")
+					document.getElementById("quak").innerHTML = "Oh yeah baby !";
+				else if (document.getElementById("quak").innerHTML == "Oh yeah baby !")
+					document.getElementById("quak").innerHTML = "I like it !";
+				else if (document.getElementById("quak").innerHTML == "I like it !")
+					document.getElementById("quak").innerHTML = "I know you like it too !";
+				else if (document.getElementById("quak").innerHTML == "I know you like it too !")
+					document.getElementById("quak").innerHTML = "mmmmmmmmm...";
+				else if (document.getElementById("quak").innerHTML == "mmmmmmmmm...")
+					document.getElementById("quak").innerHTML = "OK OK calm down...";
+				else if (document.getElementById("quak").innerHTML == "OK OK calm down...")
+					document.getElementById("quak").innerHTML = "I know I know that's funny...";
+				else if (document.getElementById("quak").innerHTML == "I know I know that's funny...")
+					document.getElementById("quak").innerHTML = "Stop it !";
+				else if (document.getElementById("quak").innerHTML == "Stop it !")
+					document.getElementById("quak").innerHTML = "I SAID STOP !";
+				else if (document.getElementById("quak").innerHTML == "I SAID STOP !")
+					document.getElementById("quak").innerHTML = "YOU SUCKS DUDE !";
+				else if (document.getElementById("quak").innerHTML == "YOU SUCKS DUDE !")
+					document.getElementById("quak").innerHTML = "I'M DONE WITH YOU";
+			}
+		</script>
+	</head>
+	<body>
+		<span class="blinking">FT_DUCK 3.0<br/><br/></span>
+		<p id="quak">Click on me !</p>
+		<img src="rubber_ducky.jpg" onclick="quack()">
+		<a href="http://172.17.0.12:5050">Quackpress ?</a>
+		<a href="http://172.17.0.13:5000">Quackmyadmin ?</a>
+		<a href="http://172.17.0.14:3000">Quackfana ?</a>
+	</body>
+</html>
