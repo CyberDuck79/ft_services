@@ -1,7 +1,7 @@
 FROM alpine:latest
 
-RUN apk update && apk upgrade
-RUN apk add --no-cache vsftpd openssl curl
+RUN apk update \
+    && apk add --no-cache vsftpd openssl curl
 
 RUN	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj '/C=FR/ST=78/L=Poissy/O=42/CN=fhenrion' -keyout /etc/ssl/private/vsftpd.key -out /etc/ssl/certs/vsftpd.crt
 

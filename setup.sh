@@ -6,7 +6,7 @@ Yellow="\n\e[33;1m"
 Light_yellow="\e[33m"
 Default="\e[0m\n"
 ### SERVICES
-services="ftps nginx mariadb wordpress phpmyadmin"
+services="ftps nginx mariadb wordpress phpmyadmin influxdb telegraf grafana"
 
 minikube_install() {
     printf "${Yellow}🦆 - QUACK QUACK ! (Let's install minikube !)${Default}"
@@ -46,6 +46,11 @@ minikube_configure() {
     kubectl create secret generic phpmyadmin-secret \
     --from-literal=pma_host='mariadb-svc' --from-literal=pma_port='3306' \
     --from-literal=pma_user='flavien' > /dev/null && \
+    kubectl create secret generic influxdb-secret \
+    --from-literal=influxdb_admin_user='flavien' --from-literal=influxdb_admin_password='T0urn3v1s' \
+    --from-literal=influxdb_config_path='/etc/influxdb.conf' > /dev/null && \
+    kubectl create secret generic telegraf-secret \
+    --from-literal=influxdb_db='telegraf' --from-literal=influxdb_url='http://influxdb-svc:8086' > /dev/null && \
     printf "${Green}Configuration generated${Default}" || { printf "${Red}Configuration failed${Default}" && exit 1; }
     eval $(minikube docker-env)
 
@@ -119,7 +124,9 @@ report() {
 
 #################################################
 
-# -> mettre ficher de conf image dans dossier
+# -> mettre fichiers de conf image dans dossier
+# -> ajouter livenessprobe pour les pods sans
+
 clear
 printf "${Yellow}🦆🦆🦆 FT_DUCKS 🦆🦆🦆${Default}"
 setup_minikube

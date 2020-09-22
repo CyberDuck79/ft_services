@@ -1,8 +1,7 @@
 FROM alpine:latest
 
-RUN apk update && apk upgrade
-# add bash ???
-RUN apk --no-cache add openssh openssl nginx
+RUN apk update \
+    && apk --no-cache add openssh openssl nginx
 RUN mkdir -p /run/nginx && rm /etc/nginx/nginx.conf
 
 COPY sshd_config /etc/ssh/sshd_config

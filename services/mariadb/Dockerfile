@@ -1,8 +1,8 @@
 FROM alpine:latest
 
 
-RUN	apk update && apk upgrade
-RUN	apk add mariadb mariadb-client
+RUN	apk update \
+    && apk add --no-cache mariadb mariadb-client
 
 COPY create_db.sql .
 COPY wordpress.sql .
