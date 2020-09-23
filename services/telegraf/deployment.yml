@@ -20,10 +20,10 @@ spec:
       containers:
       - image: telegraf-img
         name: telegraf
+        imagePullPolicy: Never
         ports:
         - containerPort: 8125
           name: telegraf
-        imagePullPolicy: Never
         volumeMounts:
         - mountPath: /var/run/docker.sock
           name: dockersock

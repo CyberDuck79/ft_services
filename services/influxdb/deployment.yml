@@ -36,6 +36,11 @@ spec:
         ports:
         - containerPort: 8086
           name: influxdb
+        livenessProbe:
+          tcpSocket:
+            port: 8086
+          initialDelaySeconds: 15
+          periodSeconds: 5
         volumeMounts:
         - name: influxdb-vol
           mountPath: /var/lib/influxdb

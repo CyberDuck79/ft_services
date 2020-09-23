@@ -124,9 +124,6 @@ report() {
 
 #################################################
 
-# -> mettre fichiers de conf image dans dossier
-# -> ajouter livenessprobe pour les pods sans
-
 clear
 printf "${Yellow}🦆🦆🦆 FT_DUCKS 🦆🦆🦆${Default}"
 setup_minikube

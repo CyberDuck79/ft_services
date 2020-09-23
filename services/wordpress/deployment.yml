@@ -19,10 +19,16 @@ spec:
       containers:
       - image: wordpress-img
         name: wordpress
+        imagePullPolicy: Never
         ports:
         - containerPort: 5050
           name: http
-        imagePullPolicy: Never
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5050
+          initialDelaySeconds: 15
+          periodSeconds: 5
         env:
         - name: DB_NAME
           valueFrom:
