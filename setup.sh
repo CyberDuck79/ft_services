@@ -60,7 +60,7 @@ minikube_configure() {
     minikube addons enable metallb > /dev/null && \
     printf "${Green}Addons activated${Default}" || { printf "${Red}addons activation failed${Default}" && exit 1; }
     SERVER_IP=$(minikube ip | grep -oE "\b([0-9]{1,3}\.){3}\b")
-    sed -i.bak "s/IP/"$SERVER_IP"/g" config_map.yml
+    sed -i.bak "s/IP/"$SERVER_IP"/g" srcs/config_map.yml
     sed -i.bak "s/http:\/\/IP/http:\/\/"$SERVER_IP"/g" srcs/nginx/index.html
     sed -i.bak "s/address=IP/address="$SERVER_IP"/g" srcs/ftps/start.sh
 
@@ -90,7 +90,7 @@ apply_configuration() {
     printf "${Yellow}🦆 - QUACK QUACK ! (Let's apply the configurations !)${Default}"
 
     printf "${Light_yellow}🦆 - quack quack... (I apply metallb configuration...)${Default}"
-    kubectl apply -f config_map.yml > /dev/null && \
+    kubectl apply -f srcs/config_map.yml > /dev/null && \
     printf "${Green}Load Balancer configuration applied${Default}" || { printf "${Red}Load Balancer configuration failed${Default}" && exit 1; }
 
     for service in $services
@@ -101,7 +101,7 @@ apply_configuration() {
         kubectl apply -f srcs/${service}/service.yml > /dev/null && \
         printf "${Green}${service} service configuration applied${Default}" || { printf "${Red}${service} service failed${Default}" && exit 1; }
     done
-    rm config_map.yml && mv config_map.yml.bak config_map.yml
+    rm srcs/config_map.yml && mv srcs/config_map.yml.bak srcs/config_map.yml
     rm srcs/nginx/index.html && mv srcs/nginx/index.html.bak srcs/nginx/index.html
     rm srcs/ftps/start.sh && mv srcs/ftps/start.sh.bak srcs/ftps/start.sh
 }

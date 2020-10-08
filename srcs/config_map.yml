@@ -5,7 +5,7 @@ data:
     - name: default
       protocol: layer2
       addresses:
-      - 172.17.0.10-172.17.0.20
+      - IP10-IP20
 kind: ConfigMap
 metadata:
   name: config
