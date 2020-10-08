@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+spec:
+  selector:
+    matchLabels:
+      app: nginx-app
+  strategy:
+    type: Recreate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-app
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: nginx
+        image: nginx-img:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
+          name: http
+        - containerPort: 443
+          name: https
+        - containerPort: 22
+          name: ssh
+        env:
+        - name: SSH_USER
+          valueFrom:
+            secretKeyRef:
+              name: ssh-secret
+              key: ssh_user
+        - name: SSH_PASS
+          valueFrom:
+            secretKeyRef:
+              name: ssh-secret
+              key: ssh_pass
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - livenessprobe.sh
+          initialDelaySeconds: 15
+          periodSeconds: 3

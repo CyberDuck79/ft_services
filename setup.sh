@@ -35,19 +35,19 @@ minikube_configure() {
 
     printf "${Light_yellow}🦆 - quack quack... (I write configuration...)${Default}"
     kubectl create secret generic ssh-secret \
-    --from-literal=ssh_user='flavien' --from-literal=ssh_pass='m@rt3@u' > /dev/null && \
+    --from-literal=ssh_user='user' --from-literal=ssh_pass='password' > /dev/null && \
     kubectl create secret generic ftps-secret \
-    --from-literal=ftps_user='flavien' --from-literal=ftps_pass='m@rt3@u' > /dev/null && \
+    --from-literal=ftps_user='user' --from-literal=ftps_pass='password' > /dev/null && \
     kubectl create secret generic mariadb-secret \
-    --from-literal=mysql_root_password='T0urn3v1s' > /dev/null && \
+    --from-literal=mysql_root_password='password' > /dev/null && \
     kubectl create secret generic wordpress-secret \
-    --from-literal=db_name='wordpress' --from-literal=db_user='flavien' \
-    --from-literal=db_host='mariadb-svc' --from-literal=db_password='T0urn3v1s' > /dev/null && \
+    --from-literal=db_name='wordpress' --from-literal=db_user='user' \
+    --from-literal=db_host='mariadb-svc' --from-literal=db_password='password' > /dev/null && \
     kubectl create secret generic phpmyadmin-secret \
     --from-literal=pma_host='mariadb-svc' --from-literal=pma_port='3306' \
-    --from-literal=pma_user='flavien' > /dev/null && \
+    --from-literal=pma_user='user' > /dev/null && \
     kubectl create secret generic influxdb-secret \
-    --from-literal=influxdb_admin_user='flavien' --from-literal=influxdb_admin_password='T0urn3v1s' \
+    --from-literal=influxdb_admin_user='user' --from-literal=influxdb_admin_password='password' \
     --from-literal=influxdb_config_path='/etc/influxdb.conf' > /dev/null && \
     kubectl create secret generic telegraf-secret \
     --from-literal=influxdb_db='telegraf' --from-literal=influxdb_url='http://influxdb-svc:8086' > /dev/null && \
@@ -61,9 +61,8 @@ minikube_configure() {
     printf "${Green}Addons activated${Default}" || { printf "${Red}addons activation failed${Default}" && exit 1; }
     SERVER_IP=$(minikube ip | grep -oE "\b([0-9]{1,3}\.){3}\b")
     sed -i.bak "s/IP/"$SERVER_IP"/g" config_map.yml
-    sed -i.bak "s/http:\/\/IP/http:\/\/"$SERVER_IP"/g" services/nginx/index.html
-    #sed -i.bak "s/http:\/\/IP/http:\/\/"$SERVER_IP"/g" services/mariadb/wordpress.sql
-    sed -i.bak "s/address=IP/address="$SERVER_IP"/g" services/ftps/start.sh
+    sed -i.bak "s/http:\/\/IP/http:\/\/"$SERVER_IP"/g" srcs/nginx/index.html
+    sed -i.bak "s/address=IP/address="$SERVER_IP"/g" srcs/ftps/start.sh
 
 }
 
@@ -82,7 +81,7 @@ build_images() {
     for service in $services
     do
         printf "${Light_yellow}🦆 - quack quack... (I build $service...)${Default}"
-        docker build services/$service -t $service-img > /dev/null && \
+        docker build srcs/$service -t $service-img > /dev/null && \
         printf "${Green}${service} image builded${Default}" || { printf "${Red}${service} image building failed${Default}" && exit 1; }
     done
 }
@@ -97,15 +96,14 @@ apply_configuration() {
     for service in $services
     do
         printf "${Light_yellow}🦆 - quack quack... (I apply $service configuration...)${Default}"
-        kubectl apply -f services/${service}/deployment.yml > /dev/null && \
+        kubectl apply -f srcs/${service}/deployment.yml > /dev/null && \
         printf "${Green}${service} deployment configuration applied${Default}" || { printf "${Red}${service} deployment failed${Default}" && exit 1; }
-        kubectl apply -f services/${service}/service.yml > /dev/null && \
+        kubectl apply -f srcs/${service}/service.yml > /dev/null && \
         printf "${Green}${service} service configuration applied${Default}" || { printf "${Red}${service} service failed${Default}" && exit 1; }
     done
     rm config_map.yml && mv config_map.yml.bak config_map.yml
-    rm services/nginx/index.html && mv services/nginx/index.html.bak services/nginx/index.html
-    #sed -i.bak "s/http:\/\/"$SERVER_IP"/http:\/\/IP/g" services/mariadb/wordpress.sql
-    rm services/ftps/start.sh && mv services/ftps/start.sh.bak services/ftps/start.sh
+    rm srcs/nginx/index.html && mv srcs/nginx/index.html.bak srcs/nginx/index.html
+    rm srcs/ftps/start.sh && mv srcs/ftps/start.sh.bak srcs/ftps/start.sh
 }
 
 #################################################
