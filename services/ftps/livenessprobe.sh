@@ -1,1 +1,0 @@
-curl --ftp-ssl --insecure --user $FTP_USER:$FTP_PASS ftp://localhost:21
